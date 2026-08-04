@@ -1,0 +1,18 @@
+/* /Pages/Home.razor.rz.scp.css */
+main[b-fsb3cpj053] {
+    padding: 24px;
+    max-width: 800px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+    main[b-fsb3cpj053]  igc-splitter {
+        height: 320px;
+        border: solid 2px #ccc;
+    }
+
+    main div[slot][b-fsb3cpj053] {
+        padding: 24px;
+    }
