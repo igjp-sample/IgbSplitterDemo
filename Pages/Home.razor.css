@@ -1,0 +1,17 @@
+﻿main {
+    padding: 24px;
+    max-width: 800px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+    main ::deep igc-splitter {
+        height: 320px;
+        border: solid 2px #ccc;
+    }
+
+    main div[slot] {
+        padding: 24px;
+    }

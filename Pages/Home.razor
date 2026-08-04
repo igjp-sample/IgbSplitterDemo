@@ -1,0 +1,47 @@
+﻿@* Pages/Home.razor *@
+@page "/"
+@inject IJSRuntime JSRuntime
+
+<main>
+    <IgbSplitter StartSize="@_startPaneSize"
+                 ResizeEnd="OnResizeEnd" 
+                 DisableCollapse>
+        <div slot="start">左ペイン</div>
+        <div slot="end">右ペイン</div>
+    </IgbSplitter>
+</main>
+
+@code {
+    private string _startPaneSize = "50%";
+
+    // このページコンポーネントの初期化時...
+    protected override async Task OnInitializedAsync()
+    {
+        // 対話モードであることを確認の上...
+        if (this.RendererInfo.IsInteractive)
+        {
+            // ブラウザのローカルストレージから前回保存のサイズ情報を読み取り...
+            var storedSize = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "startPaneSize");
+            if (!string.IsNullOrEmpty(storedSize))
+            {
+                // 読み取れたら、フィールド変数に設定します。
+                // このフィールド変数は IgbSplitter にサイズ情報として
+                // バインドされていますので、これでペインサイズが復元されます。
+                _startPaneSize = storedSize;
+            }
+        }
+    }
+
+    // ユーザー操作によるペインサイズ変更が完了したときに呼び出されます
+    private async Task OnResizeEnd(IgbSplitterResizeEventArgs args)
+    {
+        // イベント引数から左右それぞれのペインサイズがわかりますが、
+        // px 単位の数値で渡されるため、% 単位に計算します。
+        var startPaneSize = args.Detail.StartPanelSize;
+        var endPaneSize = args.Detail.EndPanelSize;
+        _startPaneSize = $"{startPaneSize / (startPaneSize + endPaneSize) * 100:0.##}%";
+
+        // % 単位に変換されたペインサイズを、ブラウザのローカルストレージに保存します
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "startPaneSize", _startPaneSize);
+    }
+}
